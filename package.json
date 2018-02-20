@@ -1,0 +1,11 @@
+{
+  "name": "puff-discord-bot",
+  "version": "1.0.0",
+  "description": "The Discord bot of Axie Infinity.",
+  "license": "MIT",
+  "author": "Axie Infinity Team <contact@axieinfinity.com>",
+  "repository": "axieinfinity/puff-discord-bot",
+  "dependencies": {
+    "discord.js": "^11.3.0"
+  }
+}
