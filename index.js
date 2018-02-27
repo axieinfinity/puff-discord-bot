@@ -1,9 +1,12 @@
+const fs = require('fs');
 const Discord = require('discord.js');
 const { botToken } = require('./auth.json');
 
+const AXIE_INFINITY_SERVER_ID = '410537146672349205';
+
 const SERVER_IDS = [
   '401808016887906304',
-  '410537146672349205'
+  // AXIE_INFINITY_SERVER_ID
 ];
 
 const CHANNEL_NAMES = [
@@ -17,10 +20,50 @@ const HELP_DESCRIPTION = [
   '**!help**: Display this help message.'
 ].join('\n');
 
-const client = new Discord.Client();
+const client = new Discord.Client({ sync: true });
+
+const getOnlineMembers = () => {
+  let aggregatedOnlineMembers;
+
+  try {
+    aggregatedOnlineMembers = require('./online-members.json');
+  } catch (e) {
+    aggregatedOnlineMembers = {};
+  }
+
+  const members = client.guilds
+    .get(AXIE_INFINITY_SERVER_ID)
+    .members;
+
+  members.map(({ user }) => {
+    if (typeof aggregatedOnlineMembers[user.id] === 'undefined') {
+      aggregatedOnlineMembers[user.id] = {
+        id: user.id,
+        username: user.username,
+        discriminator: user.discriminator,
+        count: 0
+      };
+    }
+
+    aggregatedOnlineMembers[user.id].count++;
+  });
+
+  fs.writeFile(
+    './online-members.json',
+    JSON.stringify(aggregatedOnlineMembers, null, 2),
+    err => {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
+
+  setTimeout(getOnlineMembers, 30000);
+};
 
 client.on('ready', () => {
   console.log('I am ready!');
+  getOnlineMembers();
 });
 
 const accept = (commands, handler) => {
