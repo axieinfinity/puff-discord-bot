@@ -3,3 +3,5 @@
 /npm-debug.log
 /auth.json
 /online-members.json
+/invite-events.json
+/saved.json
