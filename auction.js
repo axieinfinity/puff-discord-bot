@@ -89,15 +89,19 @@ const fetchBlocks = async channel => {
               case '4156': name = 'Almace'; break;
             }
 
+            const image = `https://axieinfinity.com/${name.toLowerCase()}.png`;
             const bidder = returnValues._bidder;
             const bidValue = returnValues._value;
 
             const embed = new Discord.RichEmbed()
-              .setTitle(`${name} got a new bid!`)
+              .setTitle('Hooray! There is a new bid!')
               .setColor(0xf9c300)
-              // .addField('Bidder', `[${bidder}](${etherscanAddress(bidder)})`)
+              .setThumbnail(image)
+              .addField('Axie', name)
               .addField('Value', ether(bidValue))
-              .setURL(etherscanTx(transactionHash))
+              // .addField('Bidder', `[${bidder}](${etherscanAddress(bidder)})`)
+              // .setURL(etherscanTx(transactionHash))
+              .setURL('https://axieinfinity.com/#agamogenesis-auction')
               .setTimestamp();
 
             channel.send({ embed });
